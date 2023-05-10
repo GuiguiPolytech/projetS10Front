@@ -17,6 +17,10 @@ fetch('http://localhost:8080/frais-deplacement')
       modifyBtn.classList.add('btn', 'btn-warning');
       modifyBtn.setAttribute('data-toggle', 'modal');
       modifyBtn.setAttribute('data-target', '#modifyModal');
+      const deleteBtnCell = document.createElement('td');
+      const deleteBtn = document.createElement('Button');
+      deleteBtn.textContent = "Supprimer";
+      deleteBtn.classList.add('btn', 'btn-danger');
 
       idCell.textContent = frais.id;
       motifCell.textContent = frais.motif;
@@ -34,6 +38,8 @@ fetch('http://localhost:8080/frais-deplacement')
       row.appendChild(statusCell);
       modifyBtnCell.appendChild(modifyBtn);
       row.appendChild(modifyBtnCell);
+      deleteBtnCell.appendChild(deleteBtn);
+      row.appendChild(deleteBtnCell);
 
       tableFrais.appendChild(row);
 
@@ -45,9 +51,33 @@ fetch('http://localhost:8080/frais-deplacement')
         localStorage.setItem('fraisStatus', frais.etats[0].libelle);
         GoTo("./ModifyFrais.html");
       });
+
+      deleteBtn.addEventListener('click', () => {
+        deleteFraisDeplacement(frais.id);
+      });
       
     });
   });
+
+  function deleteFraisDeplacement(id) {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    };
+    
+    fetch("http://localhost:8080/frais-deplacement/" + id, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Une erreur est survenue');
+        }
+        console.log(response.json());
+      })
+      .then(data => {
+        console.log(data);
+        alert("Le frais a été supprimé avec succès");
+        window.location.href = "./FraisDeplacement.html";
+      });
+  }
 
   function GoTo(path) {
     window.location.href = path;
