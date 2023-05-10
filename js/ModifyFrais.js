@@ -57,7 +57,7 @@ function fillFormFromLocalStorage() {
       .then(data => {
         console.log(data);
         alert("Le frais a été modifié avec succès");
-        window.location.href = "./ListeFrais.html";
+        window.location.href = "./FraisDeplacement.html";
       })
       .catch(error => {
         console.log(error);
@@ -70,7 +70,7 @@ function fillFormFromLocalStorage() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     await modifierFraisDeplacement();
-    window.location.href = "./FraisDeplacement.html";
+    // window.location.href = "./FraisDeplacement.html";
   });
   
   
