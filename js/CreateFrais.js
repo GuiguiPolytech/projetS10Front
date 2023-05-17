@@ -43,7 +43,7 @@ form.addEventListener("submit", (event) => {
   .then(data => {
     console.log("Frais créé avec succès", data);
     // Ajouter le code pour rediriger l'utilisateur vers la page des frais
-    window;location.href = "./FraisDeplacement.html";
+    window.location.href = "./FraisDeplacement.html";
   })
   .catch(error => {
     console.error("Erreur lors de la création du frais", error);

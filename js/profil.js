@@ -1,5 +1,5 @@
 const tableManagers = document.querySelector('#table-managers tbody');
-  const tableDemandeurs = document.querySelector('#table-demandeurs tbody');
+const tableDemandeurs = document.querySelector('#table-demandeurs tbody');
 
   fetch('http://localhost:8080/personnes')
     .then(response => response.json())

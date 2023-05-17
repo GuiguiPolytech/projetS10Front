@@ -1,3 +1,20 @@
+const selectPersonne = document.getElementById('selectPersonne');
+
+fetch('http://localhost:8080/personnes')
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(personne => {
+      const option = document.createElement('option');
+      option.value = personne.id;
+      option.textContent = personne.nom + ' ' + personne.prenom;
+      selectPersonne.appendChild(option);
+    });
+  })
+  .catch(error => {
+    console.error('Une erreur s\'est produite:', error);
+  });
+
+
 const tableFrais = document.querySelector('#table-frais tbody');
 
 fetch('http://localhost:8080/frais-deplacement')
@@ -43,22 +60,49 @@ fetch('http://localhost:8080/frais-deplacement')
 
       tableFrais.appendChild(row);
 
-      modifyBtn.addEventListener('click', () => {
-        localStorage.setItem('fraisId', frais.id);
-        localStorage.setItem('fraisMotif', frais.motif);
-        localStorage.setItem('fraisMoyenTransport', frais.moyenTransport);
-        localStorage.setItem('fraisDateDepart', frais.dateDepart);
-        localStorage.setItem('fraisStatus', frais.etats[0].libelle);
-        GoTo("./ModifyFrais.html");
+      modifyBtn.addEventListener('click', async () => {
+        const selectedPersonId = selectPersonne.value;
+        const isManager = await checkIfManager(selectedPersonId);
+      
+        if (isManager) {
+          localStorage.setItem('fraisId', frais.id);
+          localStorage.setItem('fraisMotif', frais.motif);
+          localStorage.setItem('fraisMoyenTransport', frais.moyenTransport);
+          localStorage.setItem('fraisDateDepart', frais.dateDepart);
+          localStorage.setItem('fraisStatus', frais.etats[0].libelle);
+          GoTo("./ModifyFrais.html");
+        } else {
+          alert("Vous devez être un manager pour modifier ce frais.");
+        }
       });
 
-      deleteBtn.addEventListener('click', () => {
-        deleteFraisDeplacement(frais.id);
+      deleteBtn.addEventListener('click', async () => {
+        const selectedPersonId = selectPersonne.value;
+        const isManager = await checkIfManager(selectedPersonId);
+
+        if(isManager) {
+          deleteFraisDeplacement(frais.id);
+        } else {
+          alert("Vous devez être un manager pour supprimer ce frais.");
+        }
       });
       
     });
   });
 
+  async function checkIfManager(personId) {
+    try {
+      const response = await fetch("http://localhost:8080/personnes/" + personId);
+      const person = await response.json();
+  
+      // Vérifier si la personne est un manager (mettez votre condition ici)
+      return person.typeProfil === "manager";
+    } catch (error) {
+      console.error('Une erreur s\'est produite lors de la vérification:', error);
+      return false;
+    }
+  }
+  
   function deleteFraisDeplacement(id) {
     const requestOptions = {
       method: 'DELETE',

@@ -30,7 +30,7 @@ form.addEventListener("submit", (event) => {
   .then(data => {
     console.log("Profil créé avec succès", data);
     // Ajouter le code pour rediriger l'utilisateur vers la page de profil
-    window;location.href = "../index.html";
+    window.location.href = "../index.html";
   })
   .catch(error => {
     console.error("Erreur lors de la création du profil", error);
