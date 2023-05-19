@@ -62,6 +62,10 @@ fetch('http://localhost:8080/frais-deplacement')
 
       modifyBtn.addEventListener('click', async () => {
         const selectedPersonId = selectPersonne.value;
+        if(selectedPersonId === "") {
+          alert("Veuillez sélectionner une personne");
+          return;
+        }
         const isManager = await checkIfManager(selectedPersonId);
       
         if (isManager) {
@@ -78,6 +82,10 @@ fetch('http://localhost:8080/frais-deplacement')
 
       deleteBtn.addEventListener('click', async () => {
         const selectedPersonId = selectPersonne.value;
+        if(selectedPersonId === "") {
+          alert("Veuillez sélectionner une personne");
+          return;
+        }
         const isManager = await checkIfManager(selectedPersonId);
 
         if(isManager) {
